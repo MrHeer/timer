@@ -9,9 +9,11 @@ import { LongClickDirective } from './directives';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { TimerOneComponent } from './timer-one/timer-one.component';
+import { TimerTwoComponent } from './timer-two/timer-two.component';
 
 @NgModule({
-  declarations: [AppComponent, ToolbarComponent],
+  declarations: [AppComponent, ToolbarComponent, TimerOneComponent, TimerTwoComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
