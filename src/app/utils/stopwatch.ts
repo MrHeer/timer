@@ -1,21 +1,11 @@
-import { requestAnimationTicker } from './ticker';
-
 export class Stopwatch {
   private startTime: number | null = null;
   private stopTime: number | null = null;
-  private currentTime: number;
 
-  constructor(ticker = requestAnimationTicker) {
-    this.currentTime = Stopwatch.getCurrentTime();
-    ticker.onTick(this.tick);
-  }
+  constructor() {}
 
   start = () => {
     this.startTime = Stopwatch.getCurrentTime();
-  };
-
-  tick = () => {
-    this.currentTime = Stopwatch.getCurrentTime();
   };
 
   stop = () => {
@@ -28,11 +18,17 @@ export class Stopwatch {
   };
 
   get duration() {
-    this.assertStarted();
+    if (!this.isStart()) {
+      return 0;
+    }
+
     if (this.isStop()) {
       return this.stopTime! - this.startTime!;
     }
-    return this.currentTime - this.startTime!;
+
+    // Stopwatch is running.
+    const currentTime = Stopwatch.getCurrentTime();
+    return currentTime - this.startTime!;
   }
 
   isStart = () => {
@@ -41,12 +37,6 @@ export class Stopwatch {
 
   isStop = () => {
     return this.stopTime !== null;
-  };
-
-  private assertStarted = () => {
-    if (!this.isStart()) {
-      throw 'Please start the timer.';
-    }
   };
 
   static getCurrentTime = () => {
