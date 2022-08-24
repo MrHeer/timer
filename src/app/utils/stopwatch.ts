@@ -1,45 +1,43 @@
-export class Stopwatch {
-  private startTime: number | null = null;
-  private stopTime: number | null = null;
+import { BehaviorSubject } from 'rxjs';
+import { IntervalTicker, Ticker } from './ticker';
 
-  constructor() {}
+export class Stopwatch {
+  private _time = 0;
+  private _time$ = new BehaviorSubject(0);
+  private stopped = true;
+
+  constructor(private ticker: Ticker = new IntervalTicker()) {}
 
   start = () => {
-    this.startTime = Stopwatch.getCurrentTime();
+    this._time = 0;
+    this.stopped = false;
+    this._time$.next(this.time);
+    this.ticker.start(this.tick);
   };
 
   stop = () => {
-    this.stopTime = Stopwatch.getCurrentTime();
+    this.ticker.stop();
+    this.stopped = true;
   };
 
-  reset = () => {
-    this.startTime = null;
-    this.stopTime = null;
+  private tick = (step: number) => {
+    this._time = this._time + step;
+    this._time$.next(this.time);
   };
 
-  get duration() {
-    if (!this.isStart()) {
-      return 0;
-    }
+  get time() {
+    return this._time;
+  }
 
-    if (this.isStop()) {
-      return this.stopTime! - this.startTime!;
-    }
-
-    // Stopwatch is running.
-    const currentTime = Stopwatch.getCurrentTime();
-    return currentTime - this.startTime!;
+  get time$() {
+    return this._time$.asObservable();
   }
 
   isStart = () => {
-    return this.startTime !== null;
+    return this.stopped === false;
   };
 
   isStop = () => {
-    return this.stopTime !== null;
-  };
-
-  static getCurrentTime = () => {
-    return new Date().getTime();
+    return this.stopped === true;
   };
 }

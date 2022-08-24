@@ -34,7 +34,7 @@ describe('LongClickDirective', () => {
     const delay = 200;
     directive.longClick.subscribe(() => {
       stopwatch.stop();
-      expect(stopwatch.duration).toBe(delay);
+      expect(stopwatch.time).toBe(delay);
     });
     directive.ngAfterViewInit();
     mouseDown();
@@ -42,15 +42,16 @@ describe('LongClickDirective', () => {
     tick(delay / 2);
     mouseUp();
     tick(delay);
-
     expect(stopwatch.isStop()).toBe(false);
+    stopwatch.stop();
   }));
 
-  it('should emit long click event delay 500ms', fakeAsync(() => {
+  it('should emit long click event delay 200ms', fakeAsync(() => {
     const delay = 200;
     directive.longClick.subscribe(() => {
+      tick();
       stopwatch.stop();
-      expect(stopwatch.duration).toBe(delay);
+      expect(stopwatch.time).toBe(delay);
     });
     directive.ngAfterViewInit();
     mouseDown();
@@ -62,8 +63,9 @@ describe('LongClickDirective', () => {
     const delay = 2000;
     directive.clickDelayMs = delay;
     directive.longClick.subscribe(() => {
+      tick();
       stopwatch.stop();
-      expect(stopwatch.duration).toBe(delay);
+      expect(stopwatch.time).toBe(delay);
     });
     directive.ngAfterViewInit();
     mouseDown();

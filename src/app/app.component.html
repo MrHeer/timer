@@ -4,8 +4,8 @@
   <div class="content">
     <button
       mat-raised-button
-      (click)="onStart()"
-      (longClick)="onStop()"
+      (click)="start()"
+      (longClick)="stop()"
       clickDelayMs="2000"
     >
       {{ buttonText$ | async }}

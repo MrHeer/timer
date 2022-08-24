@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy {
       })
     );
 
-    stopwatchService.duration$
+    stopwatchService.time$
       .pipe(takeUntil(this.destroy$))
       .pipe(skip(1))
       .pipe(filter((value) => value % 5000 === 0))
@@ -36,13 +36,13 @@ export class AppComponent implements OnDestroy {
       });
   }
 
-  onStart() {
+  start() {
     if (this.stopwatchService.state === 'stop') {
       this.stopwatchService.start();
     }
   }
 
-  onStop() {
+  stop() {
     if (this.stopwatchService.state === 'running') {
       this.stopwatchService.stop();
     }
