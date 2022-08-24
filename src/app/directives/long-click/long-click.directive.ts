@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { NumberInput, coerceNumberProperty } from '@angular/cdk/coercion';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { delay, repeat, takeUntil, tap } from 'rxjs/operators';
+import { delay, repeat, takeUntil } from 'rxjs/operators';
 
 @Directive({
   selector: '[longClick]',
@@ -48,9 +48,7 @@ export class LongClickDirective implements AfterViewInit {
 
     merge(mouseDown$, touchStart$)
       .pipe(
-        tap(() => console.time('test')),
         delay(this.clickDelayMs),
-        tap(() => console.timeEnd('test')),
         takeUntil(merge(mouseUp$, touchEnd$)),
         repeat()
       )
