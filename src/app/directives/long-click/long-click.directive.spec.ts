@@ -8,15 +8,15 @@ describe('LongClickDirective', () => {
   let stopwatch: Stopwatch;
   let directive: LongClickDirective;
 
-  const mousedown = () => {
-    const mousedownEvent = new MouseEvent('mousedown');
-    target.dispatchEvent(mousedownEvent);
+  const mouseDown = () => {
+    const mouseDownEvent = new MouseEvent('mousedown');
+    target.dispatchEvent(mouseDownEvent);
   };
 
-  const mouseup = () => {
-    const mouseupEvent = new MouseEvent('mouseup');
-    target.dispatchEvent(mouseupEvent);
-    target.dispatchEvent(mouseupEvent);
+  const mouseUp = () => {
+    const mouseUpEvent = new MouseEvent('mouseup');
+    target.dispatchEvent(mouseUpEvent);
+    target.dispatchEvent(mouseUpEvent);
   };
 
   beforeEach(() => {
@@ -37,10 +37,10 @@ describe('LongClickDirective', () => {
       expect(stopwatch.duration).toBe(delay);
     });
     directive.ngAfterViewInit();
-    mousedown();
+    mouseDown();
     stopwatch.start();
     tick(delay / 2);
-    mouseup();
+    mouseUp();
     tick(delay);
 
     expect(stopwatch.isStop()).toBe(false);
@@ -53,7 +53,7 @@ describe('LongClickDirective', () => {
       expect(stopwatch.duration).toBe(delay);
     });
     directive.ngAfterViewInit();
-    mousedown();
+    mouseDown();
     stopwatch.start();
     tick(delay);
   }));
@@ -66,7 +66,7 @@ describe('LongClickDirective', () => {
       expect(stopwatch.duration).toBe(delay);
     });
     directive.ngAfterViewInit();
-    mousedown();
+    mouseDown();
     stopwatch.start();
     tick(delay);
   }));

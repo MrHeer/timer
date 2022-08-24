@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -10,13 +10,11 @@ const GITHUB_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="1.03em" heig
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent {
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIconLiteral(
       'github',
       sanitizer.bypassSecurityTrustHtml(GITHUB_ICON)
     );
   }
-
-  ngOnInit(): void {}
 }

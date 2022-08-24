@@ -4,10 +4,14 @@
   <div class="content">
     <button
       mat-raised-button
-      (longClick)="onLongClick($event)"
+      (click)="onStart()"
+      (longClick)="onStop()"
       clickDelayMs="2000"
     >
-      long press
+      {{ buttonText$ | async }}
     </button>
+    <span class="tip mat-caption"
+      >当秒表到达 5 的倍数的时候，打印当前时间和秒表计时</span
+    >
   </div>
 </div>
