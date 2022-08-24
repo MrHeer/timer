@@ -22,7 +22,7 @@ export class LongClickDirective implements AfterViewInit {
   set clickDelayMs(value: NumberInput) {
     this._clickDelayMs = coerceNumberProperty(value, 0);
   }
-  private _clickDelayMs = 500;
+  private _clickDelayMs = 200;
 
   @Output() longClick = new EventEmitter<MouseEvent | TouchEvent>();
 
