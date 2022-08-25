@@ -1,43 +1,42 @@
 import { BehaviorSubject } from 'rxjs';
 import { IntervalTicker, Ticker } from './ticker';
 
+type State = 'stop' | 'running';
+
 export class Stopwatch {
-  private _time = 0;
   private _time$ = new BehaviorSubject(0);
-  private stopped = true;
+  private _state$ = new BehaviorSubject<State>('stop');
 
   constructor(private ticker: Ticker = new IntervalTicker()) {}
 
   start = () => {
-    this._time = 0;
-    this.stopped = false;
-    this._time$.next(this.time);
+    this._time$.next(0);
     this.ticker.start(this.tick);
+    this._state$.next('running');
   };
 
   stop = () => {
     this.ticker.stop();
-    this.stopped = true;
+    this._state$.next('stop');
   };
 
   private tick = (step: number) => {
-    this._time = this._time + step;
-    this._time$.next(this.time);
+    this._time$.next(this.time + step);
   };
 
   get time() {
-    return this._time;
+    return this._time$.getValue();
   }
 
   get time$() {
     return this._time$.asObservable();
   }
 
-  isStart = () => {
-    return this.stopped === false;
-  };
+  get state() {
+    return this._state$.getValue();
+  }
 
-  isStop = () => {
-    return this.stopped === true;
-  };
+  get state$() {
+    return this._state$.asObservable();
+  }
 }

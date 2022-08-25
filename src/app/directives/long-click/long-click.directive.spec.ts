@@ -24,6 +24,10 @@ describe('LongClickDirective', () => {
     const targetRef = new ElementRef(target);
     directive = new LongClickDirective(targetRef);
     stopwatch = new Stopwatch();
+    directive.longClick.subscribe(() => {
+      stopwatch.stop();
+    });
+    directive.ngAfterViewInit();
   });
 
   it('should create an instance', () => {
@@ -32,44 +36,29 @@ describe('LongClickDirective', () => {
 
   it('should cancel emit event when mouseup', fakeAsync(() => {
     const delay = 200;
-    directive.longClick.subscribe(() => {
-      stopwatch.stop();
-      expect(stopwatch.time).toBe(delay);
-    });
-    directive.ngAfterViewInit();
     mouseDown();
     stopwatch.start();
     tick(delay / 2);
     mouseUp();
-    tick(delay);
-    expect(stopwatch.isStop()).toBe(false);
+    tick(delay / 2);
+    expect(stopwatch.state).toBe('running');
     stopwatch.stop();
   }));
 
   it('should emit long click event delay 200ms', fakeAsync(() => {
     const delay = 200;
-    directive.longClick.subscribe(() => {
-      tick();
-      stopwatch.stop();
-      expect(stopwatch.time).toBe(delay);
-    });
-    directive.ngAfterViewInit();
     mouseDown();
     stopwatch.start();
     tick(delay);
+    expect(stopwatch.state).toBe('stop');
   }));
 
   it('should emit long click event delay 2000ms', fakeAsync(() => {
     const delay = 2000;
     directive.clickDelayMs = delay;
-    directive.longClick.subscribe(() => {
-      tick();
-      stopwatch.stop();
-      expect(stopwatch.time).toBe(delay);
-    });
-    directive.ngAfterViewInit();
     mouseDown();
     stopwatch.start();
     tick(delay);
+    expect(stopwatch.state).toBe('stop');
   }));
 });
