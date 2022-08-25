@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { StopwatchService } from './stopwatch.service';
 
-describe('StopwatchServiceService', () => {
+describe('StopwatchService', () => {
   let service: StopwatchService;
 
   beforeEach(() => {

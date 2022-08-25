@@ -11,7 +11,7 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { delay, repeat, takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[longClick]',
+  selector: '[ngLongClick]',
   standalone: true,
 })
 export class LongClickDirective implements AfterViewInit {
@@ -24,7 +24,8 @@ export class LongClickDirective implements AfterViewInit {
   }
   private _clickDelayMs = 200;
 
-  @Output() longClick = new EventEmitter<MouseEvent | TouchEvent>();
+  @Output() ngClick = new EventEmitter<MouseEvent | TouchEvent>();
+  @Output() ngLongClick = new EventEmitter<MouseEvent | TouchEvent>();
 
   constructor(private hostElement: ElementRef) {}
 
@@ -53,7 +54,7 @@ export class LongClickDirective implements AfterViewInit {
         repeat()
       )
       .subscribe((event) => {
-        this.longClick.emit(event);
+        this.ngLongClick.emit(event);
       });
   }
 }

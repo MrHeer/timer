@@ -7,7 +7,7 @@
     <button
       mat-raised-button
       (click)="start()"
-      (longClick)="stop()"
+      (ngLongClick)="stop()"
       clickDelayMs="2000"
     >
       {{ buttonText$ | async }}
