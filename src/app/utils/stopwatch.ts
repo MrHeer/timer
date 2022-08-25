@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { IntervalTicker, Ticker } from './ticker';
 
-type State = 'stop' | 'running';
+export type State = 'stop' | 'running';
 
 export class Stopwatch {
   private _time$ = new BehaviorSubject(0);
@@ -11,13 +11,13 @@ export class Stopwatch {
 
   start = () => {
     this._time$.next(0);
-    this.ticker.start(this.tick);
     this._state$.next('running');
+    this.ticker.start(this.tick);
   };
 
   stop = () => {
-    this.ticker.stop();
     this._state$.next('stop');
+    this.ticker.stop();
   };
 
   private tick = (step: number) => {

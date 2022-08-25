@@ -52,6 +52,8 @@ export class LongClickDirective implements AfterViewInit {
         takeUntil(merge(mouseUp$, touchEnd$)),
         repeat()
       )
-      .subscribe((val) => this.longClick.emit(val));
+      .subscribe((event) => {
+        this.longClick.emit(event);
+      });
   }
 }

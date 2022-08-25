@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { filter, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { StopwatchService } from '../stopwatch.service';
 
 @Component({
@@ -8,11 +8,12 @@ import { StopwatchService } from '../stopwatch.service';
   styleUrls: ['./timer-two.component.scss'],
 })
 export class TimerTwoComponent {
-  timer$: Observable<number>;
+  timer$: Observable<Date>;
 
   constructor(stopwatchService: StopwatchService) {
     this.timer$ = stopwatchService.time$.pipe(
-      filter((value) => value % 1000 === 0)
+      filter((value) => value % 1000 === 0),
+      map((value) => new Date(value))
     );
   }
 }
