@@ -10,6 +10,8 @@ import { NumberInput, coerceNumberProperty } from '@angular/cdk/coercion';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { delay, repeat, takeUntil } from 'rxjs/operators';
 
+type MoveThreshold = { x?: number; y?: number };
+
 @Directive({
   selector: '[ngLongClick]',
   standalone: true,
@@ -23,6 +25,8 @@ export class LongClickDirective implements AfterViewInit {
     this._clickDelayMs = coerceNumberProperty(value, 0);
   }
   private _clickDelayMs = 200;
+
+  moveThreshold: MoveThreshold = { x: 20, y: 20 };
 
   @Output() ngClick = new EventEmitter<MouseEvent | TouchEvent>();
   @Output() ngLongClick = new EventEmitter<MouseEvent | TouchEvent>();
