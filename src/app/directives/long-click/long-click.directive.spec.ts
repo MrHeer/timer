@@ -16,7 +16,6 @@ describe('LongClickDirective', () => {
   const mouseUp = () => {
     const mouseUpEvent = new MouseEvent('mouseup');
     target.dispatchEvent(mouseUpEvent);
-    target.dispatchEvent(mouseUpEvent);
   };
 
   beforeEach(() => {
@@ -50,6 +49,7 @@ describe('LongClickDirective', () => {
     mouseDown();
     stopwatch.start();
     tick(delay);
+    mouseUp();
     expect(stopwatch.state).toBe('stop');
   }));
 
@@ -59,6 +59,20 @@ describe('LongClickDirective', () => {
     mouseDown();
     stopwatch.start();
     tick(delay);
+    mouseUp();
     expect(stopwatch.state).toBe('stop');
+  }));
+
+  it('should not emit click event after long click', fakeAsync(() => {
+    let clicked = false;
+    target.addEventListener('click', () => {
+      clicked = true;
+      expect(clicked).toBe(false);
+    });
+
+    mouseDown();
+    tick(200);
+    mouseUp();
+    expect(clicked).toBe(false);
   }));
 });
