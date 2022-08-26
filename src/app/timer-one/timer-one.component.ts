@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StopwatchService } from '../stopwatch.service';
+import { Timer } from '../timer';
 
 @Component({
   selector: 'timer-one',
@@ -8,9 +8,9 @@ import { StopwatchService } from '../stopwatch.service';
   styleUrls: ['./timer-one.component.scss'],
 })
 export class TimerOneComponent {
-  timer$: Observable<number>;
+  time$: Observable<number>;
 
-  constructor(stopwatchService: StopwatchService) {
-    this.timer$ = stopwatchService.time$;
+  constructor(timer: Timer) {
+    this.time$ = timer.time$;
   }
 }

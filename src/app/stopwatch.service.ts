@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Timer } from './timer';
 import { Stopwatch } from './utils';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class StopwatchService {
+@Injectable()
+export class StopwatchService extends Timer {
   private _stopwatch = new Stopwatch();
 
   get state$() {
@@ -17,6 +16,10 @@ export class StopwatchService {
 
   get time$() {
     return this._stopwatch.time$;
+  }
+
+  get time() {
+    return this._stopwatch.time;
   }
 
   start() {

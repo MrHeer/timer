@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Timer } from '../timer';
+import { TimerService } from '../timer.service';
 
 import { TimerTwoComponent } from './timer-two.component';
 
@@ -8,9 +10,9 @@ describe('TimerTwoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TimerTwoComponent ]
-    })
-    .compileComponents();
+      declarations: [TimerTwoComponent],
+      providers: [{ provide: Timer, useClass: TimerService }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TimerTwoComponent);
     component = fixture.componentInstance;

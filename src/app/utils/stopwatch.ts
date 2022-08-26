@@ -1,7 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
+import { State } from '../interface';
 import { IntervalTicker, Ticker } from './ticker';
-
-export type State = 'stop' | 'running';
 
 export class Stopwatch {
   private _time$ = new BehaviorSubject(0);

@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { filter, map, Observable, skip, Subject, takeUntil } from 'rxjs';
-import { StopwatchService } from './stopwatch.service';
-import { State } from './utils/stopwatch';
+import { State } from './interface';
+import { Timer } from './timer';
 
 function mapStateToText(state: State) {
   switch (state) {
@@ -23,13 +23,13 @@ export class AppComponent implements OnDestroy {
   buttonText$: Observable<string>;
   destroy$ = new Subject();
 
-  constructor(private stopwatchService: StopwatchService) {
-    this.buttonText$ = stopwatchService.state$.pipe(map(mapStateToText));
+  constructor(private timer: Timer) {
+    this.buttonText$ = timer.state$.pipe(map(mapStateToText));
     this.log();
   }
 
   private log() {
-    this.stopwatchService.time$
+    this.timer.time$
       .pipe(takeUntil(this.destroy$))
       .pipe(skip(1))
       .pipe(filter((time) => time % 5000 === 0))
@@ -41,14 +41,14 @@ export class AppComponent implements OnDestroy {
   }
 
   start() {
-    if (this.stopwatchService.state === 'stop') {
-      this.stopwatchService.start();
+    if (this.timer.state === 'stop') {
+      this.timer.start();
     }
   }
 
   stop() {
-    if (this.stopwatchService.state === 'running') {
-      this.stopwatchService.stop();
+    if (this.timer.state === 'running') {
+      this.timer.stop();
     }
   }
 

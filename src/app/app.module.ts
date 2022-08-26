@@ -11,9 +11,16 @@ import { AppComponent } from './app.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TimerOneComponent } from './timer-one/timer-one.component';
 import { TimerTwoComponent } from './timer-two/timer-two.component';
+import { TimerService } from './timer.service';
+import { Timer } from './timer';
 
 @NgModule({
-  declarations: [AppComponent, ToolbarComponent, TimerOneComponent, TimerTwoComponent],
+  declarations: [
+    AppComponent,
+    ToolbarComponent,
+    TimerOneComponent,
+    TimerTwoComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -22,7 +29,7 @@ import { TimerTwoComponent } from './timer-two/timer-two.component';
     MatIconModule,
     MatToolbarModule,
   ],
-  providers: [],
+  providers: [{ provide: Timer, useClass: TimerService }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
