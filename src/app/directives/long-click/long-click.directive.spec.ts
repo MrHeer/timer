@@ -64,10 +64,10 @@ describe('LongClickDirective', () => {
   }));
 
   it('should not emit event when over the threshold', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown', 0, 0);
+    dispatchMouseEvent(target, 'mousedown');
     dispatchMouseEvent(target, 'mousemove', 50, 50);
     tick(DELAY);
-    dispatchMouseEvent(target, 'mouseup', 50, 50);
+    dispatchMouseEvent(target, 'mouseup');
     expect(component.click).toHaveBeenCalledTimes(0);
     expect(component.longClick).toHaveBeenCalledTimes(0);
   }));

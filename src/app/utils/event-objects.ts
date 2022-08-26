@@ -2,32 +2,12 @@
 export function createMouseEvent(
   type: string,
   x: number = 0,
-  y: number = 0,
-  button: number = 0
+  y: number = 0
 ): MouseEvent {
-  const event = document.createEvent('MouseEvent');
-
-  event.initMouseEvent(
-    type,
-    true /* canBubble */,
-    false /* cancelable */,
-    window /* view */,
-    0 /* detail */,
-    x /* screenX */,
-    y /* screenY */,
-    x /* clientX */,
-    y /* clientY */,
-    false /* ctrlKey */,
-    false /* altKey */,
-    false /* shiftKey */,
-    false /* metaKey */,
-    button /* button */,
-    null /* relatedTarget */
-  );
-
-  // `initMouseEvent` doesn't allow us to pass the `buttons` and
-  // defaults it to 0 which looks like a fake event.
-  Object.defineProperty(event, 'buttons', { get: () => 1 });
+  const event = new MouseEvent(type, {
+    clientX: x,
+    clientY: y,
+  });
 
   return event;
 }
