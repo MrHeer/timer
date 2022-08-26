@@ -30,9 +30,11 @@ export class AppComponent implements OnDestroy {
 
   private log() {
     this.timer.time$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(skip(1))
-      .pipe(filter((time) => time % 5000 === 0))
+      .pipe(
+        takeUntil(this.destroy$),
+        skip(1),
+        filter((time) => time % 5000 === 0)
+      )
       .subscribe((time) => {
         console.log(
           `系统时间: ${new Date().toTimeString()}, 秒表计时: ${time / 1000}s`

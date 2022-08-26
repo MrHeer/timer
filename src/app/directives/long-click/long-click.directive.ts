@@ -44,6 +44,23 @@ function getClientPosition(event: EventType) {
   return { clientX: 0, clientY: 0 };
 }
 
+function calcOffset(start: EventType, end: EventType) {
+  const { clientX: endClientX, clientY: endClientY } = getClientPosition(end);
+  const { clientX: startClientX, clientY: startClientY } =
+    getClientPosition(start);
+  return {
+    x: Math.abs(endClientX - startClientX),
+    y: Math.abs(endClientY - startClientY),
+  };
+}
+
+function isOverThreshold(offset: Position, threshold: Position) {
+  return !!(
+    (threshold?.x && offset.x > threshold.x) ||
+    (threshold?.y && offset.y > threshold.y)
+  );
+}
+
 @Directive({
   selector: '[ngLongClick]',
   standalone: true,
@@ -99,33 +116,12 @@ export class LongClickDirective implements AfterViewInit {
     const move$ = merge(mouseMove$, touchMove$);
     const end$ = merge(mouseUp$, touchEnd$);
 
-    const overThreshold$ = start$
-      .pipe(
-        switchMap((start) =>
-          move$.pipe(
-            map((move) => {
-              const { clientX: moveClientX, clientY: moveClientY } =
-                getClientPosition(move);
-              const { clientX: startClientX, clientY: startClientY } =
-                getClientPosition(start);
-              return {
-                offsetX: Math.abs(moveClientX - startClientX),
-                offsetY: Math.abs(moveClientY - startClientY),
-              };
-            })
-          )
-        )
-      )
-      .pipe(
-        filter(({ offsetX, offsetY }) => {
-          return !!(
-            (this.moveThreshold?.x && offsetX > this.moveThreshold.x) ||
-            (this.moveThreshold?.y && offsetY > this.moveThreshold.y)
-          );
-        })
-      )
-      .pipe(takeUntil(end$))
-      .pipe(repeat());
+    const overThreshold$ = start$.pipe(
+      switchMap((start) => move$.pipe(map((move) => calcOffset(start, move)))),
+      filter((offset) => isOverThreshold(offset, this.moveThreshold)),
+      takeUntil(end$),
+      repeat()
+    );
 
     const abort$ = merge(mouseLeave$, overThreshold$);
 

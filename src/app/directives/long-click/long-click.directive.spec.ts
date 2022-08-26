@@ -12,7 +12,7 @@ import { DELAY, LongClickDirective } from './long-click.directive';
 describe('LongClickDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
-  let target: Node;
+  let button: Node;
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
@@ -20,7 +20,7 @@ describe('LongClickDirective', () => {
       imports: [LongClickDirective],
     }).createComponent(TestComponent);
     component = fixture.componentInstance;
-    target = fixture.debugElement.query(
+    button = fixture.debugElement.query(
       By.directive(LongClickDirective)
     ).nativeNode;
     spyOn(component, 'click');
@@ -33,41 +33,41 @@ describe('LongClickDirective', () => {
   });
 
   it('should emit click event when click', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown');
+    dispatchMouseEvent(button, 'mousedown');
     tick(DELAY / 2);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchMouseEvent(button, 'mouseup');
     expect(component.click).toHaveBeenCalledTimes(1);
   }));
 
   it('should cancel emit event when mouseup', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown');
+    dispatchMouseEvent(button, 'mousedown');
     tick(DELAY / 2);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchMouseEvent(button, 'mouseup');
     tick(DELAY / 2);
     expect(component.longClick).toHaveBeenCalledTimes(0);
   }));
 
   it('should emit long click event delay 300ms', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown');
+    dispatchMouseEvent(button, 'mousedown');
     tick(DELAY);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchMouseEvent(button, 'mouseup');
 
     expect(component.longClick).toHaveBeenCalledTimes(1);
   }));
 
   it('should not emit click event after long click', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown');
+    dispatchMouseEvent(button, 'mousedown');
     tick(DELAY);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchMouseEvent(button, 'mouseup');
     expect(component.click).toHaveBeenCalledTimes(0);
     expect(component.longClick).toHaveBeenCalledTimes(1);
   }));
 
   it('should not emit event when over the threshold', fakeAsync(() => {
-    dispatchMouseEvent(target, 'mousedown');
-    dispatchMouseEvent(target, 'mousemove', 50, 50);
+    dispatchMouseEvent(button, 'mousedown');
+    dispatchMouseEvent(button, 'mousemove', 50, 50);
     tick(DELAY);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchMouseEvent(button, 'mouseup');
     expect(component.click).toHaveBeenCalledTimes(0);
     expect(component.longClick).toHaveBeenCalledTimes(0);
   }));
@@ -90,7 +90,7 @@ describe('Custom LongClickDirective', () => {
       imports: [LongClickDirective],
     }).createComponent(TestComponentCustomDelay);
     const component = fixture.componentInstance;
-    const target = fixture.debugElement.query(
+    const button = fixture.debugElement.query(
       By.directive(LongClickDirective)
     ).nativeElement;
     spyOn(component, 'click');
@@ -98,11 +98,12 @@ describe('Custom LongClickDirective', () => {
     fixture.detectChanges();
 
     const delay = 2000;
-    dispatchTouchEvent(target, 'touchstart');
+    dispatchTouchEvent(button, 'touchstart', 10, 10);
+    dispatchTouchEvent(button, 'touchmove', 10, 10);
     tick(delay / 2);
     expect(component.longClick).toHaveBeenCalledTimes(0);
     tick(delay / 2);
-    dispatchTouchEvent(target, 'touchend');
+    dispatchTouchEvent(button, 'touchend');
     expect(component.longClick).toHaveBeenCalledTimes(1);
   }));
 });

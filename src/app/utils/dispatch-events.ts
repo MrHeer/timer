@@ -15,8 +15,8 @@ export function dispatchEvent(node: Node | Window, event: Event): Event {
 export function dispatchMouseEvent(
   node: Node,
   type: string,
-  x: number = 0,
-  y: number = 0,
+  x?: number,
+  y?: number,
   event: MouseEvent = createMouseEvent(type, x, y)
 ): MouseEvent {
   return dispatchEvent(node, event) as MouseEvent;
@@ -26,8 +26,8 @@ export function dispatchMouseEvent(
 export function dispatchTouchEvent(
   node: Node,
   type: string,
-  x: number = 0,
-  y: number = 0
+  x?: number,
+  y?: number
 ): TouchEvent {
   return dispatchEvent(node, createTouchEvent(type, x, y)) as TouchEvent;
 }
