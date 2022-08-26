@@ -6,9 +6,9 @@
     <timer-two></timer-two>
     <button
       mat-raised-button
-      (click)="start()"
+      (ngClick)="start()"
       (ngLongClick)="stop()"
-      clickDelayMs="2000"
+      delay="2000"
     >
       {{ buttonText$ | async }}
     </button>

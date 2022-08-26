@@ -11,19 +11,21 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { delay, repeat, takeUntil } from 'rxjs/operators';
 import { Position } from 'src/app/interface';
 
+export const DELAY = 300;
+
 @Directive({
   selector: '[ngLongClick]',
   standalone: true,
 })
 export class LongClickDirective implements AfterViewInit {
   @Input()
-  get clickDelayMs(): number {
-    return this._clickDelayMs;
+  get delay(): number {
+    return this._delay;
   }
-  set clickDelayMs(value: NumberInput) {
-    this._clickDelayMs = coerceNumberProperty(value, 0);
+  set delay(value: NumberInput) {
+    this._delay = coerceNumberProperty(value, 0);
   }
-  private _clickDelayMs = 200;
+  private _delay = DELAY;
 
   moveThreshold: Position = { x: 20, y: 20 };
 
@@ -51,11 +53,7 @@ export class LongClickDirective implements AfterViewInit {
     );
 
     merge(mouseDown$, touchStart$)
-      .pipe(
-        delay(this.clickDelayMs),
-        takeUntil(merge(mouseUp$, touchEnd$)),
-        repeat()
-      )
+      .pipe(delay(this.delay), takeUntil(merge(mouseUp$, touchEnd$)), repeat())
       .subscribe((event) => {
         this.ngLongClick.emit(event);
       });

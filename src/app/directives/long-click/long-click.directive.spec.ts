@@ -6,7 +6,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { Position } from 'src/app/interface';
-import { LongClickDirective } from './long-click.directive';
+import { DELAY, LongClickDirective } from './long-click.directive';
 
 describe('LongClickDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
@@ -55,24 +55,23 @@ describe('LongClickDirective', () => {
 
   it('should emit click event when click', fakeAsync(() => {
     mouseDown();
-    tick(100);
+    tick(DELAY);
     mouseUp();
     expect(clickSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should cancel emit event when mouseup', fakeAsync(() => {
-    const delay = 200;
     mouseDown();
-    tick(delay / 2);
+    tick(DELAY / 2);
     mouseUp();
-    tick(delay / 2);
+    tick(DELAY / 2);
     expect(longClickSpy).toHaveBeenCalledTimes(0);
   }));
 
   it('should emit long click event delay 200ms', fakeAsync(() => {
-    const delay = 200;
+    const DELAY = 200;
     mouseDown();
-    tick(delay);
+    tick(DELAY);
     mouseUp();
     expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
@@ -80,24 +79,24 @@ describe('LongClickDirective', () => {
   it('should emit long click event delay 2000ms', fakeAsync(() => {
     const delay = 2000;
     mouseDown();
-    tick(delay);
+    tick(delay / 2);
+    expect(longClickSpy).toHaveBeenCalledTimes(0);
+    tick(delay / 2);
     expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should not emit click event after long click', fakeAsync(() => {
-    const delay = 200;
     mouseDown();
-    tick(delay);
+    tick(DELAY);
     mouseUp();
     expect(clickSpy).toHaveBeenCalledTimes(0);
     expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should not emit event when over the threshold', fakeAsync(() => {
-    const delay = 200;
     mouseDown();
-    mouseMove({ x: 10, y: 10 });
-    tick(delay);
+    mouseMove({ x: 50, y: 50 });
+    tick(DELAY);
     mouseUp();
     expect(clickSpy).toHaveBeenCalledTimes(0);
     expect(longClickSpy).toHaveBeenCalledTimes(0);
@@ -106,11 +105,19 @@ describe('LongClickDirective', () => {
 
 @Component({
   template: `
-    <button (ngLongClick)="longClick()" (ngClick)="click()"></button>
+    <button
+      (ngLongClick)="longClick()"
+      (ngClick)="click()"
+      delay="delay"
+    ></button>
   `,
 })
 export class TestComponent {
-  longClick() {}
-
-  click() {}
+  delay = DELAY;
+  click() {
+    console.log('click');
+  }
+  longClick() {
+    console.log('longClick');
+  }
 }
