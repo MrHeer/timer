@@ -27,30 +27,29 @@ type EventType = MouseEvent | TouchEvent;
 function getClientPosition(event: EventType) {
   if (event instanceof TouchEvent) {
     return {
-      clientX: event.touches[0].clientX,
-      clientY: event.touches[0].clientY,
+      x: event.touches[0].clientX,
+      y: event.touches[0].clientY,
     };
   }
 
   if (event instanceof MouseEvent) {
     return {
-      clientX: event.clientX,
-      clientY: event.clientY,
+      x: event.clientX,
+      y: event.clientY,
     };
   }
 
   console.warn('Unsupported event type');
 
-  return { clientX: 0, clientY: 0 };
+  return { x: 0, y: 0 };
 }
 
 function calcOffset(start: EventType, end: EventType) {
-  const { clientX: endClientX, clientY: endClientY } = getClientPosition(end);
-  const { clientX: startClientX, clientY: startClientY } =
-    getClientPosition(start);
+  const { x: endX, y: endY } = getClientPosition(end);
+  const { x: startX, x: startY } = getClientPosition(start);
   return {
-    x: Math.abs(endClientX - startClientX),
-    y: Math.abs(endClientY - startClientY),
+    x: Math.abs(endX - startX),
+    y: Math.abs(endY - startY),
   };
 }
 
