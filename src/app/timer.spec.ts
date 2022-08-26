@@ -48,8 +48,8 @@ Object.entries(services).forEach(([serviceName, timerService]) => {
         state: () => {},
         time: () => {},
       };
-      const stateSpy = spyOn(observer, 'state');
-      const timeSpy = spyOn(observer, 'time');
+      spyOn(observer, 'state');
+      spyOn(observer, 'time');
       service.state$.subscribe(observer.state);
       service.time$.subscribe(observer.time);
 
@@ -58,8 +58,8 @@ Object.entries(services).forEach(([serviceName, timerService]) => {
       service.stop();
       tick(200);
 
-      expect(stateSpy).toHaveBeenCalledTimes(3);
-      expect(timeSpy).toHaveBeenCalledTimes(22);
+      expect(observer.state).toHaveBeenCalledTimes(3);
+      expect(observer.time).toHaveBeenCalledTimes(22);
     }));
   });
 });
