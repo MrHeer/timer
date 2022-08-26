@@ -6,7 +6,7 @@ import {
   TestBed,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { dispatchMouseEvent } from 'src/app/utils';
+import { dispatchMouseEvent, dispatchTouchEvent } from 'src/app/utils';
 import { DELAY, LongClickDirective } from './long-click.directive';
 
 describe('LongClickDirective', () => {
@@ -98,11 +98,11 @@ describe('Custom LongClickDirective', () => {
     fixture.detectChanges();
 
     const delay = 2000;
-    dispatchMouseEvent(target, 'mousedown');
+    dispatchTouchEvent(target, 'touchstart');
     tick(delay / 2);
     expect(component.longClick).toHaveBeenCalledTimes(0);
     tick(delay / 2);
-    dispatchMouseEvent(target, 'mouseup');
+    dispatchTouchEvent(target, 'touchend');
     expect(component.longClick).toHaveBeenCalledTimes(1);
   }));
 });
