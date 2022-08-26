@@ -82,31 +82,31 @@ export class LongClickDirective implements AfterViewInit {
   constructor(private hostElement: ElementRef) {}
 
   ngAfterViewInit(): void {
-    const mouseDown$: Observable<MouseEvent> = fromEvent(
+    const mouseDown$ = fromEvent<MouseEvent>(
       this.hostElement.nativeElement,
       'mousedown'
     );
-    const mouseUp$: Observable<MouseEvent> = fromEvent(
+    const mouseUp$ = fromEvent<MouseEvent>(
       this.hostElement.nativeElement,
       'mouseup'
     );
-    const mouseMove$: Observable<MouseEvent> = fromEvent(
+    const mouseMove$ = fromEvent<MouseEvent>(
       this.hostElement.nativeElement,
       'mousemove'
     );
-    const mouseLeave$: Observable<MouseEvent> = fromEvent(
+    const mouseLeave$ = fromEvent<MouseEvent>(
       this.hostElement.nativeElement,
       'mouseleave'
     );
-    const touchStart$: Observable<TouchEvent> = fromEvent(
+    const touchStart$ = fromEvent<TouchEvent>(
       this.hostElement.nativeElement,
       'touchstart'
     );
-    const touchEnd$: Observable<TouchEvent> = fromEvent(
+    const touchEnd$ = fromEvent<TouchEvent>(
       this.hostElement.nativeElement,
       'touchend'
     );
-    const touchMove$: Observable<TouchEvent> = fromEvent(
+    const touchMove$ = fromEvent<TouchEvent>(
       this.hostElement.nativeElement,
       'touchmove'
     );
