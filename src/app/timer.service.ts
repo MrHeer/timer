@@ -13,7 +13,6 @@ export class TimerService extends Timer {
     const running$ = this.state$.pipe(filter((state) => state === 'running'));
     const stop$ = this.state$.pipe(filter((state) => state === 'stop'));
     running$.subscribe(() => {
-      this._time$.next(0);
       timer(0, 10)
         .pipe(map((time) => time * 10))
         .pipe(takeUntil(stop$))

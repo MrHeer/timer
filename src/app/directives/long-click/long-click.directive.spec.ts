@@ -1,35 +1,64 @@
-import { ElementRef } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
+import { Position } from 'src/app/interface';
 import { LongClickDirective } from './long-click.directive';
 
 describe('LongClickDirective', () => {
+  let fixture: ComponentFixture<TestComponent>;
   let target: HTMLElement;
-  let directive: LongClickDirective;
   let clickSpy: jasmine.Spy;
   let longClickSpy: jasmine.Spy;
 
   const mouseDown = () => {
-    const mouseDownEvent = new MouseEvent('mousedown');
+    const mouseDownEvent = new MouseEvent('mousedown', {
+      clientX: 0,
+      clientY: 0,
+    });
     target.dispatchEvent(mouseDownEvent);
+    fixture.detectChanges();
   };
 
   const mouseUp = () => {
-    const mouseUpEvent = new MouseEvent('mouseup');
+    const mouseUpEvent = new MouseEvent('mouseup', { clientX: 0, clientY: 0 });
     target.dispatchEvent(mouseUpEvent);
+    fixture.detectChanges();
+  };
+
+  const mouseMove = (to: Position) => {
+    const mouseUpEvent = new MouseEvent('mouseup', {
+      clientX: to.x,
+      clientY: to.y,
+    });
+    target.dispatchEvent(mouseUpEvent);
+    fixture.detectChanges();
   };
 
   beforeEach(() => {
-    target = document.createElement('button');
-    const targetRef = new ElementRef(target);
-    directive = new LongClickDirective(targetRef);
-    clickSpy = spyOn(directive.ngClick, 'emit');
-    longClickSpy = spyOn(directive.ngLongClick, 'emit');
-    directive.ngAfterViewInit();
+    fixture = TestBed.configureTestingModule({
+      declarations: [TestComponent],
+      imports: [LongClickDirective],
+    }).createComponent(TestComponent);
+    clickSpy = spyOn(fixture.componentInstance, 'click');
+    longClickSpy = spyOn(fixture.componentInstance, 'longClick');
+    target = fixture.nativeElement;
+    fixture.detectChanges(); // initial binding
   });
 
   it('should create an instance', () => {
-    expect(directive).toBeTruthy();
+    expect(fixture).toBeTruthy();
   });
+
+  it('should emit click event when click', fakeAsync(() => {
+    mouseDown();
+    tick(100);
+    mouseUp();
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  }));
 
   it('should cancel emit event when mouseup', fakeAsync(() => {
     const delay = 200;
@@ -37,7 +66,7 @@ describe('LongClickDirective', () => {
     tick(delay / 2);
     mouseUp();
     tick(delay / 2);
-    expect(clickSpy).toHaveBeenCalledTimes(0);
+    expect(longClickSpy).toHaveBeenCalledTimes(0);
   }));
 
   it('should emit long click event delay 200ms', fakeAsync(() => {
@@ -45,22 +74,43 @@ describe('LongClickDirective', () => {
     mouseDown();
     tick(delay);
     mouseUp();
-    expect(longClickSpy).toHaveBeenCalled();
+    expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should emit long click event delay 2000ms', fakeAsync(() => {
     const delay = 2000;
     mouseDown();
     tick(delay);
-    mouseUp();
-    expect(longClickSpy).toHaveBeenCalled();
+    expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should not emit click event after long click', fakeAsync(() => {
-    // TODO
+    const delay = 200;
+    mouseDown();
+    tick(delay);
+    mouseUp();
+    expect(clickSpy).toHaveBeenCalledTimes(0);
+    expect(longClickSpy).toHaveBeenCalledTimes(1);
   }));
 
-  it('should not emit long click when over the threshold', fakeAsync(() => {
-    // TODO
+  it('should not emit event when over the threshold', fakeAsync(() => {
+    const delay = 200;
+    mouseDown();
+    mouseMove({ x: 10, y: 10 });
+    tick(delay);
+    mouseUp();
+    expect(clickSpy).toHaveBeenCalledTimes(0);
+    expect(longClickSpy).toHaveBeenCalledTimes(0);
   }));
 });
+
+@Component({
+  template: `
+    <button (ngLongClick)="longClick()" (ngClick)="click()"></button>
+  `,
+})
+export class TestComponent {
+  longClick() {}
+
+  click() {}
+}

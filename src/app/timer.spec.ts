@@ -35,11 +35,31 @@ Object.entries(services).forEach(([serviceName, timerService]) => {
       expect(service.state).toBe('stop');
 
       service.start();
+      tick();
       expect(service.state).toBe('running');
       expect(service.time).toBe(0);
       tick(200);
       expect(service.time).toBe(200);
       service.stop();
+    }));
+
+    it('should be observable', fakeAsync(() => {
+      const observer = {
+        state: () => {},
+        time: () => {},
+      };
+      const stateSpy = spyOn(observer, 'state');
+      const timeSpy = spyOn(observer, 'time');
+      service.state$.subscribe(observer.state);
+      service.time$.subscribe(observer.time);
+
+      service.start();
+      tick(200);
+      service.stop();
+      tick(200);
+
+      expect(stateSpy).toHaveBeenCalledTimes(3);
+      expect(timeSpy).toHaveBeenCalledTimes(22);
     }));
   });
 });
