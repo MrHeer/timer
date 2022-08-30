@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { NumberInput, coerceNumberProperty } from '@angular/cdk/coercion';
-import { fromEvent, merge, Observable } from 'rxjs';
+import { fromEvent, merge } from 'rxjs';
 import {
   delay,
   delayWhen,
@@ -16,7 +16,6 @@ import {
   repeat,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs/operators';
 import { Position } from 'src/app/interface';
 
